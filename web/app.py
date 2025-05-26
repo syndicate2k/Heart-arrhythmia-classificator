@@ -188,13 +188,15 @@ def main():
             y_pred, y_true = predict_sample(model, X_normalized, y)
             accuracy = get_model_accuracy(model_name, config)
 
+            true_class_value = class_labels[y_true] if y_true is not None else "N/A"
+
             # Создание таблицы с результатами
             results = pd.DataFrame({
                 "Метрика": ["Точность модели на валидационной выборке", "Предположительный класс заболевания", "Действительный класс заболевания"],
                 "Значение": [
                     f"{accuracy * 100:.2f}%",
                     class_labels[y_pred],
-                    class_labels[y_true]
+                    true_class_value
                 ]
             })
 
