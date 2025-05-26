@@ -1,0 +1,26 @@
+data:
+  test_data_path: 'data/raw/mitbih_test.csv'
+  train_data_path: 'data/raw/mitbih_train.csv'
+
+models:
+  model_dir: 'models'
+  models_accuracy_path: models/models_accuracy.csv
+  model_files:
+    - 'svc.joblib'
+    - 'rfc.joblib'
+    - 'knc.joblib'
+    - 'xgb.joblib'
+    - 'fnn.h5'
+    - 'cnn.h5'
+
+preprocessing:
+  scaler_path: 'models/scaler.joblib'
+  resample_rate: 125
+  lowpass_cutoff: 50
+
+class_labels:
+  0: 'Нормальные удары'
+  1: 'Наджелудочковые экстрасистолы'
+  2: 'Желудочковые экстрасистолы'
+  3: 'Фузионные удары'
+  4: 'Неклассифицируемые удары'
