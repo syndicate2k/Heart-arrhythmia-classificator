@@ -11,7 +11,7 @@ from utils import predict_sample, get_model_accuracy, sample_test_classes
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.preprocessing import load_data, butter_lowpass, split_data, normalize_data
+from src.preprocessing import load_data, split_data, normalize_data
 
 # Загрузка конфигурации
 with open('config/config.yaml', 'r', encoding='utf-8') as file:
@@ -151,8 +151,6 @@ def main():
                 X = pd.DataFrame([row_data])
                 y = None  # костыль 
 
-            # Прогоняем данные через фильтр нижних частот Баттерворта
-            X_filtered = butter_lowpass(X, config['preprocessing']['lowpass_cutoff'], config['preprocessing']['resample_rate'])
             plot_signal_with_plotly(X)
         else:
             st.error("Выбранный индекс строки выходит за пределы доступных данных.")
@@ -181,14 +179,12 @@ def main():
 
         # Предобработка данных
         scaler = load(config['preprocessing']['scaler_path'])
-        X_normalized, _ = normalize_data(X_filtered, scaler)
+        X_normalized, _ = normalize_data(X, scaler)
 
         # Предикт
         if st.button("Predict"):
             y_pred, y_true = predict_sample(model, X_normalized, y)
             accuracy = get_model_accuracy(model_name, config)
-
-            true_class_value = class_labels[y_true] if y_true is not None else "N/A"
 
             # Создание таблицы с результатами
             results = pd.DataFrame({
@@ -196,7 +192,7 @@ def main():
                 "Значение": [
                     f"{accuracy * 100:.2f}%",
                     class_labels[y_pred],
-                    true_class_value
+                    class_labels[y_true] if y_true is not None else "N/A"
                 ]
             })
 

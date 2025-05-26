@@ -4,11 +4,11 @@ from sklearn.metrics import accuracy_score
 
 # Предикт с использованием готовой модели для streamlit
 def predict_sample(model, X, y=None):
-    if hasattr(model, 'predict'):
-        y_pred = model.predict(X)
+    y_pred = model.predict(X)
+
+    if hasattr(model, 'layers'):
         pred_class = int(np.argmax(y_pred[0]))
     else:
-        y_pred = np.argmax(model.predict(X), axis=-1)
         pred_class = int(y_pred[0])
 
     # y=None если мы сами загружаем файл
@@ -35,7 +35,7 @@ def get_model_accuracy(model_name, config):
     return model_accuracy[0]
 
 # Делаем случайную выборку из тестовых данных
-def sample_test_classes(df, num_samples=10):
+def sample_test_classes(df, num_samples=15):
     # Получаем уникальные классы из последнего столбца
     classes = df.iloc[:, -1].unique()
 
